@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Gaya Gravitasi Newton</title>
+    <style>
+        /* Membuat background gradasi biru-putih */
+        body {
+            background: linear-gradient(to right, #0099FF, #FFFFFF);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        /* Styling untuk kotak input */
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #0099FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0077cc;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Simulasi Gaya Gravitasi Newton</h1>
+    <p>Masukkan massa benda 1, massa benda 2, dan jarak antar benda</p>
+    
+    <input type="number" id="m1" placeholder="Massa Benda 1 (kg)" required><br>
+    <input type="number" id="m2" placeholder="Massa Benda 2 (kg)" required><br>
+    <input type="number" id="r" placeholder="Jarak Antar Benda (m)" required><br>
+    
+    <button onclick="hitungGaya()">Hitung Gaya Gravitasi</button>
+    
+    <div id="output"></div>
+</div>
+
+<!-- Menyertakan musik -->
+<audio id="audio" src="suara.1.mp3"></audio> <!-- Ganti dengan file efek suara yang diinginkan -->
+
+<script>
+    function hitungGaya() {
+        // Ambil nilai input
+        let m1 = parseFloat(document.getElementById('m1').value);
+        let m2 = parseFloat(document.getElementById('m2').value);
+        let r = parseFloat(document.getElementById('r').value);
+        
+        // Cek jika input valid
+        if (isNaN(m1) || isNaN(m2) || isNaN(r) || m1 <= 0 || m2 <= 0 || r <= 0) {
+            alert("Input tidak valid, pastikan semua nilai positif dan valid.");
+            return;
+        }
+
+        // Konstanta gravitasi
+        const G = 6.67430e-11;
+
+        // Perhitungan gaya gravitasi
+        let gayaGravitasi = G * (m1 * m2) / Math.pow(r, 2);
+
+        // Tampilkan hasil output
+        let outputText = "Gaya Gravitasi antara kedua benda adalah: " + gayaGravitasi.toExponential(10) + " N";
+        document.getElementById('output').textContent = outputText;
+
+        // Putar efek suara selama 3 detik
+        let audio = document.getElementById('audio');
+        audio.currentTime = 0; // Mulai audio dari awal
+        audio.play();
+
+        // Hentikan audio setelah 2 detik
+        setTimeout(function() {
+            audio.pause();
+        }, 3000); // 3000 ms = 3 detik
+
+        
+    }
+</script>
+
+</body>
+</html>
