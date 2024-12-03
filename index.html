@@ -45,7 +45,7 @@
         <h1>Hitung Gaya Gravitasi</h1>
         <div>
             <label for="jumlah">Masukkan jumlah pasangan benda: </label>
-            <input type="number" id="jumlah" min="1">
+            <input type="number" id="jumlah" min="1" max="5">
             <button onclick="generateInputFields()">OK</button>
         </div>
         <div id="input-fields"></div>
@@ -57,12 +57,19 @@
     <audio id="audio" src="suara.1.mp3"></audio>
 
     <script>
+        let massaBendaPertama = [];
+        let massaBendaKedua = [];
+        let jarakBenda = [];
+
         function generateInputFields() {
             const jumlah = document.getElementById('jumlah').value;
             const inputFieldsDiv = document.getElementById('input-fields');
             inputFieldsDiv.innerHTML = '';
+            massaBendaPertama = [];
+            massaBendaKedua = [];
+            jarakBenda = [];
 
-            if (jumlah > 0) {
+            if (jumlah > 0 && jumlah <= 5) {
                 let table = '<table>';
                 table += '<tr><th>Pasangan</th><th>Massa Benda Pertama (kg)</th><th>Massa Benda Kedua (kg)</th><th>Jarak (m)</th></tr>';
                 
@@ -80,6 +87,8 @@
                 table += '</table>';
                 inputFieldsDiv.innerHTML = table;
                 document.getElementById('calculation').style.display = 'block';
+            } else {
+                alert('Jumlah pasangan benda harus antara 1 dan 5.');
             }
         }
 
@@ -89,22 +98,35 @@
             let resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '<h2>Hasil Perhitungan:</h2>';
 
+            let dataLengkap = true;
+
             for (let i = 0; i < jumlah; i++) {
                 const m1 = document.getElementById(`m1-${i}`).value;
                 const m2 = document.getElementById(`m2-${i}`).value;
                 const r = document.getElementById(`r-${i}`).value;
 
-                if (m1 && m2 && r) {
-                    const F = G * (m1 * m2) / (r * r);
-                    resultsDiv.innerHTML += `<p>Pasangan ke-${i + 1}: Gaya gravitasi = ${F} Newton</p>`;
-                } else {
+                if (!m1 || !m2 || !r) {
+                    dataLengkap = false;
                     resultsDiv.innerHTML += `<p>Pasangan ke-${i + 1}: Data tidak lengkap</p>`;
+                } else {
+                    massaBendaPertama.push(m1);
+                    massaBendaKedua.push(m2);
+                    jarakBenda.push(r);
                 }
             }
 
-            // Memutar musik setelah perhitungan selesai
-            const audio = document.getElementById('audio');
-            audio.play();
+            if (dataLengkap) {
+                for (let i = 0; i < jumlah; i++) {
+                    const F = G * (massaBendaPertama[i] * massaBendaKedua[i]) / (jarakBenda[i] * jarakBenda[i]);
+                    resultsDiv.innerHTML += `<p>Pasangan ke-${i + 1}: Gaya gravitasi = ${F} Newton</p>`;
+                }
+
+                // Memutar musik setelah perhitungan selesai
+                const audio = document.getElementById('audio');
+                audio.play();
+            } else {
+                resultsDiv.innerHTML = '<h2>Data tidak lengkap. Tidak dapat menghitung gaya gravitasi.</h2>';
+            }
         }
     </script>
 </body>
