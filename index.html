@@ -1,133 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravitasi Newton</title>
+    <title> Staff FPD 2026</title>
     <style>
         body {
-            background: linear-gradient(to bottom, red, white);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
             font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            padding: 30px;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .box {
+            max-width: 450px;
+            background: white;
+            margin: auto;
+            padding: 25px;
+            border-radius: 8px;
             text-align: center;
         }
-        .container table {
+        h2 {
+            margin-bottom: 10px;
+        }
+        input {
             width: 100%;
-            margin: 20px 0;
-            border-collapse: collapse;
-        }
-        .container th, .container td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        .container th {
-            background-color: #f2f2f2;
-        }
-        input, button {
-            margin: 10px 0;
             padding: 10px;
-            font-size: 1rem;
+            margin: 8px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .hasil {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .lolos {
+            color: green;
+        }
+        .tidak {
+            color: red;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Hitung Gaya Gravitasi</h1>
-        <div>
-            <label for="jumlah">Masukkan jumlah pasangan benda: </label>
-            <input type="number" id="jumlah" min="1" max="5">
-            <button onclick="generateInputFields()">OK</button>
-        </div>
-        <div id="input-fields"></div>
-        <div id="calculation" style="display: none;">
-            <button onclick="calculateGravitasi()">Hitung Gaya Gravitasi</button>
-        </div>
-        <div id="results"></div>
-    </div>
-    <audio id="audio" src="suara.1.mp3"></audio>
 
-    <script>
-        let massaBendaPertama = [];
-        let massaBendaKedua = [];
-        let jarakBenda = [];
+<div class="box">
+    <h2>Cek Kelulusan Staff FPD 2026</h2>
+    <p>Masukkan nama lengkap dan asal sekolah</p>
 
-        function generateInputFields() {
-            const jumlah = document.getElementById('jumlah').value;
-            const inputFieldsDiv = document.getElementById('input-fields');
-            inputFieldsDiv.innerHTML = '';
-            massaBendaPertama = [];
-            massaBendaKedua = [];
-            jarakBenda = [];
+    <input type="text" id="nama" placeholder="Nama Lengkap">
+    <input type="text" id="sekolah" placeholder="SMA 2 PINRANG/SMK 5 PINRANG">
 
-            if (jumlah > 0 && jumlah <= 5) {
-                let table = '<table>';
-                table += '<tr><th>Pasangan</th><th>Massa Benda Pertama (kg)</th><th>Massa Benda Kedua (kg)</th><th>Jarak (m)</th></tr>';
-                
-                for (let i = 0; i < jumlah; i++) {
-                    table += `
-                        <tr>
-                            <td>${i + 1}</td>
-                            <td><input type="number" id="m1-${i}" step="any"></td>
-                            <td><input type="number" id="m2-${i}" step="any"></td>
-                            <td><input type="number" id="r-${i}" step="any"></td>
-                        </tr>
-                    `;
-                }
-                
-                table += '</table>';
-                inputFieldsDiv.innerHTML = table;
-                document.getElementById('calculation').style.display = 'block';
-            } else {
-                alert('Jumlah pasangan benda harus antara 1 dan 5.');
-            }
+    <button onclick="cekKelulusan()">Cek Kelulusan</button>
+
+    <div id="hasil" class="hasil"></div>
+</div>
+
+<script>
+    // ===============================
+    // DATA LOLOS STAFF FPD 2026
+    // ===============================
+    const dataLolos = [
+        { nama: "INDRA SETIAWAN", sekolah: "SMA 2 PINRANG" },
+        { nama: "ABIL SAFAAT", sekolah: "SMK 5 PINRANG" },
+        { nama: "DIAN ADE PUTRI", sekolah: "SMA 2 PINRANG" },
+        { nama: "JULIANTI", sekolah: "SMA 2 PINRANG" },
+        { nama: "AISYA ALYA", sekolah: "SMA 2 PINRANG" },
+        { nama: "AULIA CITRA ANUGRAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "AFDAL RUDI", sekolah: "SMA 2 PINRANG" },
+        { nama: "AZIZUL ISMI UMAR", sekolah: "SMK 5 PINRANG" },
+        { nama: "JUMRIAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "KHAIRUN NISA", sekolah: "SMK 5 PINRANG" },
+        { nama: "KAMELIANI", sekolah: "SMK 5 PINRANG" },
+        { nama: "MUHAMMAD TAUFIQ", sekolah: "SMA 2 PINRANG" },
+        { nama: "NUR FITRA RAMADHANI", sekolah: "SMK 5 PINRANG" },
+        { nama: "REHAN", sekolah: "SMA 2 PINRANG" },
+        { nama: "RIANA", sekolah: "SMA 2 PINRANG" },
+        { nama: "SAKINAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "YANA", sekolah: "SMA 2 PINRANG" },
+        { nama: "ABDUL FATTA RIFAI", sekolah: "SMA 2 PINRANG" },
+        { nama: "AKBAR", sekolah: "SMA 2 PINRANG" },
+        { nama: "DANIA AMIRAH", sekolah: "SMK 5 PINRANG" },
+        { nama: "MELYSAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "MUH SAING", sekolah: "SMA 2 PINRANG" },
+        { nama: "MUH ILYAS", sekolah: "SMA 2 PINRANG" },
+        { nama: "NUR FAIDAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "NUR ALAMSYAH ILHAM", sekolah: "SMA 2 PINRANG" },
+        { nama: "NURUL MAGHFIRAH", sekolah: "SMK 5 PINRANG" },
+        { nama: "RESKY NUR AZYFAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "RADIATUL MUNAWARRAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "TIWI LESTARI", sekolah: "SMA 2 PINRANG" },
+        { nama: "ZAZKIA RAMADHANI", sekolah: "SMK 5 PINRANG" },
+        { nama: "ANUGRAH ALAM", sekolah: "SMA 2 PINRANG" },
+        { nama: "EVIANA KARINA", sekolah: "SMA 2 PINRANG" },
+        { nama: "NURAULIA", sekolah: "SMA 2 PINRANG" },
+        { nama: "PANI", sekolah: "SMK 5 PINRANG" },
+        { nama: "RESKY HELL YANTII", sekolah: "SMK 5 PINRANG" },
+        { nama: "SAFNI MAULANA ASRIADI", sekolah: "SMA 2 PINRANG" },
+        { nama: "SYARIDAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "WAHYUNI", sekolah: "SMA 2 PINRANG" },
+        { nama: "WAHYULIA", sekolah: "SMK 5 PINRANG" }
+    ];
+
+    function cekKelulusan() {
+        const namaInput = document.getElementById("nama").value.toUpperCase().trim();
+        const sekolahInput = document.getElementById("sekolah").value.toUpperCase().trim();
+        const hasil = document.getElementById("hasil");
+
+        const ditemukan = dataLolos.find(d =>
+            d.nama === namaInput && d.sekolah === sekolahInput
+        );
+
+        if (ditemukan) {
+            hasil.innerHTML = "🎉 SELAMAT! ANDA <span class='lolos'>LOLOS</span> SEBAGAI STAFF FPD 2026/HUBUNGI NOMOR INI UNTUK INFO LEBIH LANJUT 082193374985";
+        } else {
+            hasil.innerHTML = "❌ MAAF, DATA ANDA BELUM SESUAI <span class='tidak'>TIDAK LOLOS/ Mohon cek kembali penulisan nama lengkap dan asal sekolah tanpa tanda baca</span>";
         }
+    }
+</script>
 
-        function calculateGravitasi() {
-            const G = 6.67430e-11;
-            const jumlah = document.getElementById('jumlah').value;
-            let resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<h2>Hasil Perhitungan:</h2>';
-
-            let dataLengkap = true;
-
-            for (let i = 0; i < jumlah; i++) {
-                const m1 = document.getElementById(`m1-${i}`).value;
-                const m2 = document.getElementById(`m2-${i}`).value;
-                const r = document.getElementById(`r-${i}`).value;
-
-                if (!m1 || !m2 || !r) {
-                    dataLengkap = false;
-                    resultsDiv.innerHTML += `<p>Pasangan ke-${i + 1}: Data tidak lengkap</p>`;
-                } else {
-                    massaBendaPertama.push(m1);
-                    massaBendaKedua.push(m2);
-                    jarakBenda.push(r);
-                }
-            }
-
-            if (dataLengkap) {
-                for (let i = 0; i < jumlah; i++) {
-                    const F = G * (massaBendaPertama[i] * massaBendaKedua[i]) / (jarakBenda[i] * jarakBenda[i]);
-                    resultsDiv.innerHTML += `<p>Pasangan ke-${i + 1}: Gaya gravitasi = ${F} Newton</p>`;
-                }
-
-                // Memutar musik setelah perhitungan selesai
-                const audio = document.getElementById('audio');
-                audio.play();
-            } else {
-                resultsDiv.innerHTML = '<h2>Data tidak lengkap. Tidak dapat menghitung gaya gravitasi.</h2>';
-            }
-        }
-    </script>
 </body>
 </html>
